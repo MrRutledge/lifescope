@@ -11,6 +11,7 @@ import {
   readMultiHealthCache,
   writeHealthCache,
 } from "@/data/healthConnectService";
+import { formatLocalDateKey, getLastNDateKeys } from "@/utils/dateKey";
 
 export type ConnectionStatus =
   | "checking"
@@ -38,13 +39,7 @@ function toErrorMessage(err: unknown): string {
 }
 
 function getLast7DateStrs(): string[] {
-  const days: string[] = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    days.push(d.toISOString().split("T")[0]);
-  }
-  return days;
+  return getLastNDateKeys(7);
 }
 
 export function useHealthConnect(): HealthConnectState {
@@ -55,7 +50,7 @@ export function useHealthConnect(): HealthConnectState {
   const [lastSynced, setLastSynced] = useState<Date | undefined>();
 
   const loadFromCache = useCallback(async (): Promise<boolean> => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = formatLocalDateKey();
     const last7 = getLast7DateStrs();
     const [todayCache, weekCache] = await Promise.all([
       readHealthCache(today),
@@ -74,7 +69,7 @@ export function useHealthConnect(): HealthConnectState {
 
   const loadData = useCallback(async (isBackground = false) => {
     try {
-      const today = new Date().toISOString().split("T")[0];
+      const today = formatLocalDateKey();
       const [todayResult, weekResult] = await Promise.all([
         fetchDayHealthData(today),
         fetchLast7DaysHealth(),

@@ -58,7 +58,7 @@ export function HealthConnectBanner({
             <TouchableOpacity
               onPress={() => setSetupVisible(true)}
               style={styles.setupLink}
-              accessibilityLabel="How to set up Google Fit credentials"
+              accessibilityLabel="How to set up Health Connect"
             >
               <Ionicons name="help-circle-outline" size={13} color={colors.primary} />
               <Text
@@ -67,7 +67,7 @@ export function HealthConnectBanner({
                   { color: colors.primary, fontFamily: "Inter_500Medium" },
                 ]}
               >
-                How to set up Google Fit credentials
+                How to set up Health Connect
               </Text>
             </TouchableOpacity>
           </View>
@@ -177,7 +177,7 @@ export function HealthConnectBanner({
           <TouchableOpacity
             onPress={() => setSetupVisible(true)}
             style={styles.setupLink}
-            accessibilityLabel="How to set up Google Fit credentials"
+            accessibilityLabel="How to set up Health Connect"
           >
             <Ionicons name="help-circle-outline" size={13} color={colors.primary} />
             <Text
@@ -186,7 +186,7 @@ export function HealthConnectBanner({
                 { color: colors.primary, fontFamily: "Inter_500Medium" },
               ]}
             >
-              How to set up Google Fit credentials
+              How to set up Health Connect
             </Text>
           </TouchableOpacity>
         </View>

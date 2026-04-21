@@ -12,6 +12,7 @@ import { CATEGORY_COLORS, CATEGORY_COLORS_DARK } from "@/data/sampleData";
 import { useHealthContext } from "@/context/HealthContext";
 import { useHydration } from "@/hooks/useHydration";
 import type { RealHealthData } from "@/data/healthConnectService";
+import { formatLocalDateKey } from "@/utils/dateKey";
 
 export default function OverviewScreen() {
   const colors = useColors();
@@ -28,7 +29,7 @@ export default function OverviewScreen() {
   const topCategories = day.categoryUsage.slice(0, 3);
   const maxCatMinutes = topCategories[0]?.minutes ?? 1;
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = formatLocalDateKey();
   const isToday = selectedDate === todayStr;
 
   const realWeekMap: Record<string, RealHealthData> = {};

@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getLastNDateKeys, localDayBounds } from "@/utils/dateKey";
 
 export interface RealHealthData {
   date: string;
@@ -29,10 +30,7 @@ export const HEALTH_PERMISSIONS: HealthPermission[] = [
 ];
 
 function dayBounds(dateStr: string): { startTime: string; endTime: string } {
-  return {
-    startTime: new Date(dateStr + "T00:00:00.000").toISOString(),
-    endTime: new Date(dateStr + "T23:59:59.999").toISOString(),
-  };
+  return localDayBounds(dateStr);
 }
 
 async function getModule() {
@@ -213,12 +211,7 @@ export async function fetchDayHealthData(dateStr: string): Promise<RealHealthDat
 }
 
 export async function fetchLast7DaysHealth(): Promise<RealHealthData[]> {
-  const days: string[] = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    days.push(d.toISOString().split("T")[0]);
-  }
+  const days = getLastNDateKeys(7);
   return Promise.all(days.map((d) => fetchDayHealthData(d)));
 }
 

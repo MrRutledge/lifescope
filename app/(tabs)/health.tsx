@@ -13,6 +13,7 @@ import { useHealthContext } from "@/context/HealthContext";
 import { useHydration } from "@/hooks/useHydration";
 import type { HealthData } from "@/data/sampleData";
 import type { RealHealthData } from "@/data/healthConnectService";
+import { formatLocalDateKey } from "@/utils/dateKey";
 
 function mergeHealth(
   sampleHealth: HealthData,
@@ -40,7 +41,7 @@ export default function HealthScreen() {
   const [selectedDate, setSelectedDate] = useState(today.date);
   const sampleDay = getDayByDate(selectedDate) ?? today;
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = formatLocalDateKey();
   const isToday = selectedDate === todayStr;
 
   const realWeekMap: Record<string, RealHealthData> = {};

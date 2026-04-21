@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,45 +18,31 @@ interface Props {
 const STEPS = [
   {
     number: "1",
-    title: "Create a Google Cloud project",
+    title: "Install Health Connect (if needed)",
     description:
-      'Go to console.cloud.google.com and sign in with your Google account. Click \'Select a project\' at the top, then \'New Project\'. Give it a name (e.g. \'My Health App\') and click Create.',
-    icon: "cloud-outline" as const,
+      "On Android 13 and older, install the Health Connect app from the Play Store. Newer Android versions include Health Connect in system settings.",
+    icon: "download-outline" as const,
   },
   {
     number: "2",
-    title: "Enable the Fitness API",
+    title: "Open the Health tab",
     description:
-      "In your new project, open the left menu and go to APIs & Services \u2192 Library. Search for 'Fitness API', click on it, then click Enable.",
-    icon: "fitness-outline" as const,
+      "In LifeScope, go to the Health tab and tap Allow on the Health Connect banner.",
+    icon: "heart-outline" as const,
   },
   {
     number: "3",
-    title: "Configure the OAuth consent screen",
+    title: "Grant read permissions",
     description:
-      "Go to APIs & Services \u2192 OAuth consent screen. Choose 'External' and fill in your app name and support email. Under Scopes, add the Fitness read scopes (activity, heart rate, sleep). Save and continue through the steps.",
-    icon: "person-circle-outline" as const,
+      "Approve access for metrics like steps, sleep, heart rate, and calories when Android prompts for Health Connect permissions.",
+    icon: "shield-checkmark-outline" as const,
   },
   {
     number: "4",
-    title: "Create OAuth credentials",
+    title: "Sync source apps",
     description:
-      "Go to APIs & Services \u2192 Credentials. Click '+ Create Credentials' \u2192 'OAuth client ID'. Choose 'Android' as the application type. Enter your app's package name and the SHA-1 signing certificate fingerprint. Click Create.",
-    icon: "key-outline" as const,
-  },
-  {
-    number: "5",
-    title: "Copy your Client ID",
-    description:
-      "After creating the credential, you'll see a Client ID ending in .apps.googleusercontent.com. Copy this value \u2014 you'll need it in the next step.",
-    icon: "copy-outline" as const,
-  },
-  {
-    number: "6",
-    title: "Add the Client ID to the app",
-    description: "",
-    icon: "code-slash-outline" as const,
-    isCode: true,
+      "Make sure Samsung Health, Fitbit, Google Fit, or other apps are writing data into Health Connect so LifeScope can read it.",
+    icon: "sync-outline" as const,
   },
 ];
 
@@ -89,7 +74,7 @@ export function GoogleFitSetupModal({ visible, onClose }: Props) {
                   { color: colors.foreground, fontFamily: "Inter_700Bold" },
                 ]}
               >
-                Connect Google Fit
+                Set up Health Connect
               </Text>
               <Text
                 style={[
@@ -97,7 +82,7 @@ export function GoogleFitSetupModal({ visible, onClose }: Props) {
                   { color: colors.mutedForeground, fontFamily: "Inter_400Regular" },
                 ]}
               >
-                6-step setup guide
+                4-step setup guide
               </Text>
             </View>
           </View>
@@ -129,7 +114,7 @@ export function GoogleFitSetupModal({ visible, onClose }: Props) {
               ]}
             >
               <Text style={{ fontFamily: "Inter_600SemiBold" }}>Note for developers & operators: </Text>
-              {"This guide is for the person setting up the app, not everyday users. It walks you through creating free Google Cloud credentials so the app can read real fitness data. Takes about 10 minutes."}
+              {"No API keys are required for Health Connect. This setup only covers Android permissions and data source sync."}
             </Text>
           </View>
 
@@ -169,50 +154,14 @@ export function GoogleFitSetupModal({ visible, onClose }: Props) {
                 </Text>
               </View>
 
-              {step.isCode ? (
-                <View style={styles.descriptionBlock}>
-                  <Text
-                    style={[
-                      styles.stepDesc,
-                      { color: colors.mutedForeground, fontFamily: "Inter_400Regular" },
-                    ]}
-                  >
-                    {"Open the project's "}<Text style={{ fontFamily: "Inter_600SemiBold", color: colors.foreground }}>.env</Text>{" file (or your hosting environment's settings) and add:"}
-                  </Text>
-                  <View
-                    style={[
-                      styles.codeBlock,
-                      { backgroundColor: colors.background, borderColor: colors.border },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.codeText,
-                        { color: colors.healthColor, fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" },
-                      ]}
-                    >
-                      EXPO_PUBLIC_GOOGLE_FIT_CLIENT_ID=your-client-id-here
-                    </Text>
-                  </View>
-                  <Text
-                    style={[
-                      styles.stepDesc,
-                      { color: colors.mutedForeground, fontFamily: "Inter_400Regular" },
-                    ]}
-                  >
-                    {'Restart the app after saving. The "Connect Your Health Data" button will then use your credentials to request real fitness data.'}
-                  </Text>
-                </View>
-              ) : (
-                <Text
-                  style={[
-                    styles.stepDesc,
-                    { color: colors.mutedForeground, fontFamily: "Inter_400Regular" },
-                  ]}
-                >
-                  {step.description}
-                </Text>
-              )}
+              <Text
+                style={[
+                  styles.stepDesc,
+                  { color: colors.mutedForeground, fontFamily: "Inter_400Regular" },
+                ]}
+              >
+                {step.description}
+              </Text>
 
               {index < STEPS.length - 1 && (
                 <View style={[styles.stepDivider, { borderColor: colors.border }]} />
@@ -234,8 +183,8 @@ export function GoogleFitSetupModal({ visible, onClose }: Props) {
               ]}
             >
               <Text style={{ fontFamily: "Inter_600SemiBold" }}>Tip: </Text>
-              If you get stuck at any step, search "Google Cloud OAuth Android setup" for
-              up-to-date screenshots and video walkthroughs.
+              If permission prompts do not appear, open Android Settings → Health Connect →
+              App permissions and verify LifeScope has access.
             </Text>
           </View>
 
@@ -320,13 +269,6 @@ const styles = StyleSheet.create({
   },
   stepTitle: { flex: 1, fontSize: 14 },
   stepDesc: { fontSize: 13, lineHeight: 20 },
-  descriptionBlock: { gap: 8 },
-  codeBlock: {
-    borderRadius: 8,
-    borderWidth: 1,
-    padding: 12,
-  },
-  codeText: { fontSize: 12 },
   stepDivider: { borderTopWidth: 0 },
   tipCard: {
     flexDirection: "row",
