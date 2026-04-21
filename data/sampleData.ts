@@ -1,3 +1,5 @@
+import { formatLocalDateKey } from "@/utils/dateKey";
+
 export interface AppUsage {
   name: string;
   category: "Social" | "Productivity" | "Entertainment" | "Communication" | "Health" | "Other";
@@ -207,7 +209,7 @@ function generateLast30Days(): DayData[] {
   for (let i = 29; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().split("T")[0];
+    const dateStr = formatLocalDateKey(d);
     days.push(generateDayData(dateStr, 29 - i));
   }
   return days;
@@ -254,5 +256,5 @@ export function formatShortDate(dateStr: string): string {
 }
 
 export function isToday(dateStr: string): boolean {
-  return dateStr === new Date().toISOString().split("T")[0];
+  return dateStr === formatLocalDateKey();
 }
